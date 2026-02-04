@@ -765,6 +765,25 @@
   text-align: center;
 }
 
+.close-page {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  font-size: 20px;
+  line-height: 1;
+  justify-content: center;
+}
+
+.close-page:hover {
+  background: hsla(0, 84%, 60%, 0.2);
+  border-color: hsla(0, 84%, 60%, 0.4);
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
   </style>
 </head>
 <body>
@@ -785,11 +804,19 @@
             </div>
             <span class="logo-text">Credentials</span>
           </div>
-          <button class="glass-button theme-toggle" id="themeToggle">
-            <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-            <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
-            <span id="themeText">Dark</span>
+          <div style="display:flex; gap:0.75rem;">
+          <button class="glass-button close-page" onclick="closePage()" title="Back to home">
+            ✕
           </button>
+          
+          
+          <div style="display:flex; gap:0.75rem;">
+            <button class="glass-button theme-toggle" id="themeToggle">
+              <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+              <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+              <span id="themeText">Dark</span>
+            </button>
+          </div>
         </div>
       </div>
     </header>
@@ -997,13 +1024,13 @@ const certificates = [
   },
   {
     id: 10,
-    title: "📜 Poster Making Competition",
+    title: "📜 Poster making Competition",
     issuer: "Robotics Club",
     date: "September 2024",
     description: "Showcased creativity, design sense, and visual storytelling in a poster making competition held on Engineer’s Day.",
-    image: "Images/Poster making Competition.png",
+    image: "Images/Poster Making Competition.png",
     category: "Competition",
-    pdf: "Certificates/Poster making Competition.pdf"
+    pdf: "Certificates/Poster Making Competition.pdf"
   },
   {
     id: 11,
@@ -1246,11 +1273,29 @@ if (savedTheme === "dark") {
 document.getElementById("currentYear").textContent = new Date().getFullYear();
 renderCertificates();
 
+function closePage() {
+  // Preferred: go back if user came from your portfolio
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    // Fallback: redirect to main site
+    window.location.href = "index.html";
+  }
+}
+
+// Handle browser Back button → navigate instead
+history.pushState({ page: "credentials" }, "", location.href);
+
+window.addEventListener("popstate", () => {
+  document.body.classList.add("fade-out");
+  setTimeout(() => {
+    window.location.href = "index.html";
+  }, 200);
+});
+
+
 </script>
 
 
 </body>
-
 </html>
-
-
