@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Credentials - My Certificates</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    :root {
+      --background: hsl(210, 40%, 98%);
+      --foreground: hsl(222, 47%, 11%);
+      --primary: hsl(173, 80%, 40%);
+      --primary-foreground: hsl(0, 0%, 100%);
+      --accent: hsl(280, 70%, 50%);
+      --glass-bg: hsla(0, 0%, 100%, 0.7);
+      --glass-border: hsla(0, 0%, 100%, 0.5);
+      --glass-shadow: hsla(222, 47%, 11%, 0.1);
+      --glass-text: hsl(222, 47%, 11%);
+      --glass-text-muted: hsl(215, 16%, 40%);
+      --gradient-start: hsl(173, 80%, 70%);
+      --gradient-mid: hsl(220, 90%, 70%);
+      --gradient-end: hsl(280, 80%, 70%);
+    }
+    .dark {
+      --background: hsl(222, 47%, 6%);
+      --foreground: hsl(210, 40%, 98%);
+      --primary: hsl(173, 80%, 50%);
+      --glass-bg: hsla(222, 47%, 15%, 0.6);
+      --glass-border: hsla(0, 0%, 100%, 0.1);
+      --glass-shadow: hsla(0, 0%, 0%, 0.3);
+      --glass-text: hsl(210, 40%, 98%);
+      --glass-text-muted: hsl(215, 20%, 70%);
+      --gradient-start: hsl(174, 36%, 10%);
+      --gradient-mid: hsl(220, 70%, 25%);
+      --gradient-end: hsl(280, 60%, 25%);
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--background);
+      color: var(--foreground);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+    }
+    /* Gradient Background */
+    .gradient-bg {
+      background: linear-gradient(
+        135deg,
+        var(--gradient-start) 0%,
+        var(--gradient-mid) 50%,
+        var(--gradient-end) 100%
+      );
+      min-height: 100vh;
+      position: relative;
+    }
+    /* Animated Background Orbs */
+    .bg-orbs {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      filter: blur(60px);
+    }
+    .orb-1 {
+      width: 300px;
+      height: 300px;
+      top: 80px;
+      left: 40px;
+      animation: float1 8s ease-in-out infinite;
+    }
+    .orb-2 {
+      width: 400px;
+      height: 400px;
+      bottom: 80px;
+      right: 40px;
+      animation: float2 10s ease-in-out infinite;
+    }
+    .orb-3 {
+      width: 500px;
+      height: 500px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.05);
+      animation: float3 6s ease-in-out infinite;
+    }
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(10px, -20px); }
+    }
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-10px, 20px); }
+    }
+    @keyframes float3 {
+      0%, 100% { transform: translate(-50%, -50%); }
+      50% { transform: translate(-50%, calc(-50% + 15px)); }
+    }
+    @keyframes glow {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+    /* Glass Card Styles */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 8px 32px var(--glass-shadow);
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+    .glass-card-hover {
+      transition: all 0.3s ease;
+    }
+    .glass-card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px var(--glass-shadow);
+      border-color: hsla(173, 80%, 40%, 0.3);
+    }
+    .glass-button {
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.75rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--glass-text);
+    }
+    .glass-button:hover {
+      background: hsla(173, 80%, 40%, 0.2);
+      border-color: hsla(173, 80%, 40%, 0.5);
+    }
+    /* Container */
+    .container {
+      max-width: min(1200px, 100%);
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    /* Header */
+    header {
+      position: relative;
+      z-index: 10;
+      padding: 1.5rem 0;
+    }
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .logo-icon {
+      padding: 0.5rem;
+    }
+    .logo-icon svg {
+      width: 24px;
+      height: 24px;
+      color: var(--primary);
+    }
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--glass-text);
+    }
+    /* Theme Toggle */
+    .theme-toggle {
+      font-size: 0.875rem;
+    }
+    .theme-toggle svg {
+      width: 20px;
+      height: 20px;
+      transition: transform 0.3s ease;
+    }
+    /* Hero Section */
+    .hero {
+      position: relative;
+      z-index: 10;
+      padding: 3rem 0 5rem;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .hero-badge span {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--glass-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .hero-badge svg {
+      width: 20px;
+      height: 20px;
+      color: var(--primary);
+      animation: glow 3s ease-in-out infinite;
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      line-height: 1.1;
+    }
+    .hero h1 .text-normal {
+      color: var(--glass-text);
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 1.125rem;
+      color: var(--glass-text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+    /* Certificates Grid */
+    .certificates-section {
+      position: relative;
+      z-index: 10;
+      padding-bottom: 5rem;
+    }
+    .certificates-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    @media (min-width: 768px) {
+      .certificates-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 1024px) {
+      .certificates-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    /* Certificate Card */
+    .certificate-card {
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.5s ease forwards;
+    }
+    .certificate-card:nth-child(1) { animation-delay: 0.1s; }
+    .certificate-card:nth-child(2) { animation-delay: 0.2s; }
+    .certificate-card:nth-child(3) { animation-delay: 0.3s; }
+    .certificate-card:nth-child(4) { animation-delay: 0.4s; }
+    .certificate-card:nth-child(5) { animation-delay: 0.5s; }
+    .certificate-card:nth-child(6) { animation-delay: 0.6s; }
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .card-image-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 1rem 1rem 0 0;
+    }
+    .card-image {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .certificate-card:hover .card-image {
+      transform: scale(1.05);
+    }
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .certificate-card:hover .card-overlay {
+      opacity: 1;
+    }
+    .preview-icon {
+      padding: 0.75rem;
+    }
+    .preview-icon svg {
+      width: 24px;
+      height: 24px;
+      color: white;
+    }
+    .category-badge {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--glass-text);
+    }
+    .card-content {
+      padding: 1.25rem;
+    }
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--glass-text);
+      margin-bottom: 0.5rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-issuer {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--glass-text-muted);
+      margin-bottom: 0.75rem;
+      font-size: 0.875rem;
+    }
+    .card-issuer svg {
+      width: 16px;
+      height: 16px;
+    }
+    .card-description {
+      font-size: 0.875rem;
+      color: var(--glass-text-muted);
+      margin-bottom: 1rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.5;
+    }
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-date {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--glass-text-muted);
+      font-size: 0.875rem;
+    }
+    .card-date svg {
+      width: 16px;
+      height: 16px;
+    }
+    .card-view {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: var(--primary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: transform 0.3s ease;
+    }
+    .certificate-card:hover .card-view {
+      transform: translateX(5px);
+    }
+    .card-view svg {
+      width: 16px;
+      height: 16px;
+    }
+    /* Footer */
+    footer {
+      position: relative;
+      z-index: 10;
+      padding: 2rem 0;
+      border-top: 1px solid var(--glass-border);
+      text-align: center;
+    }
+    footer p {
+      font-size: 0.875rem;
+      color: var(--glass-text-muted);
+    }
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      width: calc(100% - 2rem);
+      max-width: 700px;
+      max-height: none;
+      height: auto;
+      z-index: 101;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 10;
+      padding: 0.5rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .modal-close:hover {
+      background: hsla(0, 84%, 60%, 0.2);
+    }
+    .modal-close svg {
+      width: 20px;
+      height: 20px;
+      color: var(--glass-text);
+    }
+    .modal-image {
+      width: 100%;
+      height: auto;
+      max-height: 40vh;
+      object-fit: contain;
+      background: rgba(0, 0, 0, 0.1);
+    }
+    .dark .modal-image {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .modal-category {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    .modal-content {
+      padding: 1.5rem 2rem 2rem;
+      overflow-y: auto;
+      flex: 0 1 auto;
+    }
+    .modal-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--glass-text);
+      margin-bottom: 1rem;
+    }
+    .modal-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .modal-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--glass-text-muted);
+    }
+    .modal-meta-item svg {
+      width: 20px;
+      height: 20px;
+      color: var(--primary);
+    }
+    .modal-meta-item span {
+      font-weight: 500;
+    }
+    .modal-description {
+      color: var(--glass-text-muted);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .modal-verify-btn {
+      width: 100%;
+      justify-content: center;
+      background: hsla(173, 80%, 40%, 0.2);
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .modal-verify-btn:hover {
+      background: hsla(173, 80%, 40%, 0.3);
+    }
+    .modal-verify-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      /* Hero spacing */
+      .hero {
+        padding: 2rem 0 3rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+  /* DETAILS MODAL */
+    .modal {
+      top: 1rem;
+      left: 1rem;
+      right: 1rem;
+      bottom: auto;                 /* critical: prevents full-height */
+      transform: none;
+      width: auto;
+      max-height: calc(100vh - 2rem);
+    }
+
+    .modal.active {
+      transform: none;
+    }
+
+    .modal-image {
+      height: auto;
+      max-height: 30vh;
+    }
+
+    .modal-content {
+      padding: 1.25rem;
+      max-height: calc(100vh - 14rem); /* image + header + padding */
+      overflow-y: auto;
+      flex: 0 1 auto;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+    }
+
+    /* PDF MODAL */
+    #pdfModal {
+      top: 1rem;
+      left: 1rem;
+      right: 1rem;
+      bottom: 1rem;
+      transform: none;
+      width: auto;
+      max-width: none;
+      height: auto;
+      max-height: calc(100vh - 2rem);
+    }
+
+    #pdfFrame {
+      width: 100%;
+      flex: 1;
+      border: none;
+    }
+  }
+
+    @media (max-width: 768px) {
+        .modal {
+          max-height: calc(100vh - 2rem);
+          height: auto;
+        }
+
+        .modal-content {
+          max-height: calc(100vh - 14rem);
+        }
+    }
+    /* DESKTOP PDF MODAL FIX */
+    #pdfModal {
+      width: 90vw;
+      max-width: 1100px;
+      height: 90vh;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #pdfFrame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  flex: 1;
+}
+
+    .filter-btn.active {
+    background: hsla(173, 80%, 40%, 0.3);
+    border-color: hsla(173, 80%, 40%, 0.6);
+    }
+
+/* ============================
+   FILTER BAR – COLOR MATCHED
+============================ */
+
+.filter-bar {
+  position: relative;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-between;
+
+  /* MATCH glass-card exactly */
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px var(--glass-shadow);
+  border-radius: 1rem;
+}
+
+/* Label – subtle like hero badge text */
+.filter-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--glass-text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Select dropdown */
+.glass-select {
+  min-width: 220px;
+  appearance: none;
+
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+
+  padding: 0.65rem 2.25rem 0.65rem 1rem;
+  border-radius: 0.75rem;
+
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--glass-text);
+
+  cursor: pointer;
+  outline: none;
+
+  transition: 
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+/* Arrow – same muted tone as metadata text */
+.filter-bar::after {
+  content: "▾";
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%) rotate(0deg);
+  font-size: 0.75rem;
+  color: var(--glass-text-muted);
+  pointer-events: none;
+  transition: transform 0.25s ease;
+}
+
+/* Rotate arrow when active */
+.filter-bar:focus-within::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+/* Hover – same accent behavior as glass buttons */
+.glass-select:hover {
+  background: hsla(173, 80%, 40%, 0.12);
+  border-color: hsla(173, 80%, 40%, 0.35);
+}
+
+/* Focus – matches theme primary */
+.glass-select:focus {
+  background: hsla(173, 80%, 40%, 0.15);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px hsla(173, 80%, 40%, 0.25);
+}
+
+/* Dropdown list */
+.glass-select option {
+  background: var(--background);
+  color: var(--foreground);
+  font-weight: 500;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+  }
+
+  .glass-select {
+    width: 100%;
+  }
+}
+
+/* FILTER SELECT WITH ICON */
+.filter-select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.filter-icon {
+  position: absolute;
+  left: 0.75rem;
+  width: 16px;
+  height: 16px;
+  color: var(--glass-text-muted);
+  pointer-events: none;
+}
+
+.glass-select {
+  padding-left: 2.25rem; /* space for icon */
+}
+
+/* RESULT COUNT TEXT */
+.filter-bar {
+  margin-bottom: 0.25rem;
+}
+
+.result-count {
+  margin-top: -0.5rem;
+  font-size: 0.95rem;
+  position: relative;
+  top: -2px;   /* negative = up, positive = down */
+  text-align: center;
+}
+
+  </style>
+</head>
+<body>
+  <div class="gradient-bg">
+    <!-- Background Orbs -->
+    <div class="bg-orbs">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+    <!-- Header -->
+    <header>
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">
+            <div class="glass-card logo-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+            </div>
+            <span class="logo-text">Credentials</span>
+          </div>
+          <button class="glass-button theme-toggle" id="themeToggle">
+            <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+            <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+            <span id="themeText">Dark</span>
+          </button>
+        </div>
+      </div>
+    </header>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <h1>
+          <span class="text-normal">My </span>
+          <span class="gradient-text">Certificates</span>
+        </h1>
+       <div class="hero-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+          <span>A showcase of my achievements and certifications.</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+        </div>      
+      </div>
+    </section>
+
+        <!-- Category Filter -->
+        <div class="container" style="margin-bottom: 0.75rem;">
+        <div class="glass-card filter-bar">
+            <label for="categoryFilter" class="filter-label">Filter by category</label>
+
+            <div class="filter-select-wrapper">
+            <!-- Lucide Filter Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="filter-icon" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 4h18" />
+                <path d="M6 12h12" />
+                <path d="M10 20h4" />
+            </svg>
+
+            <select id="categoryFilter" class="glass-select">
+            <option value="All">All certificates</option>
+            <option value="Course">Course</option>
+            <option value="Internship">Internship</option>
+            <option value="Quiz">Quiz</option>
+            <option value="Workshop">Workshop</option>
+            <option value="Competition">Competition</option>
+            <option value="Experience">Experience</option>
+            <option value="Contribution">Contribution</option>
+            <option value="Coding">Coding</option>
+            <option value="Innovation">Innovation</option>
+            <option value="Session">Session</option>
+            </select>
+            </div>
+        </div>
+        </div>
+
+<!-- Result Count -->
+<div class="container">
+  <p class="result-count" id="resultCount"></p>
+</div>
+
+
+
+    <!-- Certificates Grid -->
+    <section class="certificates-section">
+      <div class="container">
+        <div class="certificates-grid" id="certificatesGrid">
+          <!-- Cards will be injected by JavaScript -->
+        </div>
+      </div>
+    </section>
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <p>© <span id="currentYear"></span> All of Shankar's certifications are verified and authentic.</p>
+      </div>
+    </footer>
+  </div>
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay"></div>
+  <div class="modal glass-card" id="modal">
+    <button class="glass-card modal-close" id="modalClose">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+    <div style="position: relative;">
+      <img class="modal-image" id="modalImage" src="" alt="">
+      <div class="glass-card modal-category" id="modalCategory"></div>
+    </div>
+    <div class="modal-content">
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-meta">
+        <div class="modal-meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+          <span id="modalIssuer"></span>
+        </div>
+        <div class="modal-meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+          <span id="modalDate"></span>
+        </div>
+      </div>
+      <p class="modal-description" id="modalDescription"></p>
+      <button class="glass-button modal-verify-btn" id="verifyBtn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+        Download Certificate
+      </button>
+    </div>
+  </div>
+  <!-- PDF Preview Modal -->
+<div class="modal-overlay" id="pdfOverlay"></div>
+<div class="modal glass-card" id="pdfModal">
+  <button class="glass-card modal-close" id="pdfClose">✕</button>
+<iframe id="pdfFrame" loading="lazy"></iframe>
+
+
+</div>
+<script>
+  let activeCertificate = null;
+
+/* -----------------------------
+   CERTIFICATE DATA
+------------------------------ */
+const certificates = [
+  {
+    id: 1,
+    title: "📜 Blog Writing Internship Certification",
+    issuer: "Internshala",
+    date: "January 2026",
+    description: "Certified for  successfully secured Blog Writing internship at InAmigos Foundation.",
+    image: "Images/Shankar_Pyke_Hired_Certificate.png",
+    category: "Internship",
+    pdf: "Certificates/Shankar_Pyke_Hired_Certificate.pdf"
+  },
+  {
+    id: 2,
+    title: "📜 System Design Masterclass",
+    issuer: "Udemy",
+    date: "July 2025",
+    description: "Comprehensive understanding of system design principles and scalability.",
+    image: "Images/System_Design_Masterclass.png",
+    category: "Course",
+    pdf: "Certificates/System_Design_Masterclass.pdf"
+  },
+  {
+    id: 3,
+    title: "📜 GenAI",
+    issuer: "Pieces",
+    date: "July 2025",
+    description: "Earned the GenAI 101 with Pieces certification, gaining foundational knowledge of Generative AI concepts.",
+    image: "Images/GenAI.png",
+    category: "Course",
+    pdf: "Certificates/GenAI.pdf"
+  },
+  {
+    id: 4,
+    title: "📜 Best Out Of Waste",
+    issuer: "Robotics Club",
+    date: "November 2025",
+    description: "Hands-on experience in creative reuse and sustainable project development.",
+    image: "Images/Best Out Of Waste.png",
+    category: "Experience",
+    pdf: "Certificates/Best Out Of Waste.pdf"
+  },
+  {
+    id: 5,
+    title: "📜 Blood Donation",
+    issuer: "State Blood Council",
+    date: "August 2025",
+    description: "Actively participated in a blood donation camp, contributing to community health and social responsibility.",
+    image: "Images/Blood Donation.png",
+    category: "Contribution",
+    pdf: "Certificates/Blood Donation.pdf"
+  },
+  {
+    id: 6,
+    title: "📜 Coding Event",
+    issuer: "Asansol Engineering College",
+    date: "April 2025",
+    description: "Participated in a hands-on coding event, showcasing logical thinking and coding fundamentals.",
+    image: "Images/Code With Pysnake.png",
+    category: "Coding",
+    pdf: "Certificates/Code With Pysnake.pdf"
+  },
+  {
+    id: 7,
+    title: "📜 Mindmaze- The CP Arena Quiz Day 1",
+    issuer: "Dev Society",
+    date: "July 2025",
+    description: "Earned 2nd position on Day 1 of the Mindmaze: The CP Arena quiz by showcasing logical reasoning and competitive problem-solving.",
+    image: "Images/Mindmaze- The CP Arena Quiz 2nd.png",
+    category: "Quiz",
+    pdf: "Certificates/Mindmaze- The CP Arena Quiz 2nd.pdf"
+  },
+  {
+    id: 8,
+    title: "📜 Mindmaze- The CP Arena Quiz Day 2",
+    issuer: "Dev Society",
+    date: "July 2025",
+    description: "Earned 3rd position on Day 1 of the Mindmaze: The CP Arena quiz by showcasing logical reasoning and competitive problem-solving.",
+    image: "Images/Mindmaze- The CP Arena Quiz 3rd.png",
+    category: "Quiz",
+    pdf: "Certificates/Mindmaze- The CP Arena Quiz 3rd.pdf"
+  },
+  {
+    id: 9,
+    title: "📜 Photography Workshop",
+    issuer: "Dev Society",
+    date: "November 2024",
+    description: "Hands-on experience in photography, visual composition, and creative framing.",
+    image: "Images/Photography Workshop.png",
+    category: "Workshop",
+    pdf: "Certificates/Photography Workshop.pdf"
+  },
+  {
+    id: 10,
+    title: "📜 Poster making Competition",
+    issuer: "Robotics Club",
+    date: "September 2024",
+    description: "Showcased creativity, design sense, and visual storytelling in a poster making competition held on Engineer’s Day.",
+    image: "Images/Poster Making Competition.png",
+    category: "Competition",
+    pdf: "Certificates/Poster Making Competition.pdf"
+  },
+  {
+    id: 11,
+    title: "📜 Science Club Event",
+    issuer: "Science Club",
+    date: "February 2025",
+    description: "Demonstrated enthusiasm for science and innovation through active participation in a Science Club event.",
+    image: "Images/Science Club.png",
+    category: "Innovation",
+    pdf: "Certificates/Science Club.pdf"
+  },
+  {
+    id: 12,
+    title: "📜 Tech Talk",
+    issuer: "Robotics Club",
+    date: "July 2025",
+    description: "Attended a tech talk session on blockchain, gaining foundational insights into decentralized technologies.",
+    image: "Images/Tech Talk.png",
+    category: "Session",
+    pdf: "Certificates/Tech Talk.pdf"
+  },
+  
+];
+
+/* -----------------------------
+   DOM ELEMENTS
+------------------------------ */
+const certificatesGrid = document.getElementById("certificatesGrid");
+
+const modalOverlay = document.getElementById("modalOverlay");
+const modal = document.getElementById("modal");
+const modalClose = document.getElementById("modalClose");
+const modalImage = document.getElementById("modalImage");
+const modalCategory = document.getElementById("modalCategory");
+const modalTitle = document.getElementById("modalTitle");
+const modalIssuer = document.getElementById("modalIssuer");
+const modalDate = document.getElementById("modalDate");
+const modalDescription = document.getElementById("modalDescription");
+const verifyBtn = document.getElementById("verifyBtn");
+
+const pdfOverlay = document.getElementById("pdfOverlay");
+const pdfModal = document.getElementById("pdfModal");
+const pdfFrame = document.getElementById("pdfFrame");
+const pdfClose = document.getElementById("pdfClose");
+const resultCount = document.getElementById("resultCount");
+
+
+
+/* -----------------------------
+   RENDER CERTIFICATES
+------------------------------ */
+let activeCategory = "All";
+
+function renderCertificates() {
+  const filtered =
+    activeCategory === "All"
+      ? certificates
+      : certificates.filter(cert => cert.category === activeCategory);
+
+  // Update result count text
+  if (resultCount) {
+    resultCount.textContent =
+      activeCategory === "All"
+        ? `Showing ${filtered.length} certificates`
+        : `Showing ${filtered.length} certificates in ${activeCategory}`;
+  }
+
+  // Render cards
+  certificatesGrid.innerHTML = filtered
+    .map(
+      cert => `
+      <div class="certificate-card glass-card glass-card-hover" data-id="${cert.id}">
+        <div class="card-image-container">
+          <img class="card-image" src="${cert.image}" alt="${cert.title}">
+          <div class="glass-card category-badge">${cert.category}</div>
+        </div>
+
+        <div class="card-content">
+          <h3 class="card-title">${cert.title}</h3>
+          <div class="card-issuer">${cert.issuer}</div>
+          <p class="card-description">${cert.description}</p>
+
+          <div class="card-footer">
+            <span class="card-date">${cert.date}</span>
+            <div class="card-view" data-pdf="${cert.pdf}">View</div>
+          </div>
+        </div>
+      </div>
+    `
+    )
+    .join("");
+
+  // Card click handlers
+  document.querySelectorAll(".certificate-card").forEach(card => {
+    card.addEventListener("click", () => {
+      const cert = certificates.find(c => c.id == card.dataset.id);
+      openDetailsModal(cert);
+    });
+  });
+}
+
+
+const categoryFilter = document.getElementById("categoryFilter");
+
+categoryFilter.addEventListener("change", () => {
+  activeCategory = categoryFilter.value;
+  renderCertificates();
+});
+
+
+
+/* -----------------------------
+   DETAILS MODAL
+------------------------------ */
+function openDetailsModal(cert) {
+  activeCertificate = cert; // ADD THIS LINE
+
+  modalImage.src = cert.image;
+  modalCategory.textContent = cert.category;
+  modalTitle.textContent = cert.title;
+  modalIssuer.textContent = cert.issuer;
+  modalDate.textContent = cert.date;
+  modalDescription.textContent = cert.description;
+
+  modalOverlay.classList.add("active");
+  modal.classList.add("active");
+  document.body.style.overflow = "hidden";
+  verifyBtn.disabled = !cert.pdf;
+  verifyBtn.style.opacity = cert.pdf ? "1" : "0.5";
+  verifyBtn.style.cursor = cert.pdf ? "pointer" : "not-allowed";
+  verifyBtn.setAttribute("aria-disabled", !cert.pdf);
+
+
+}
+
+
+function closeDetailsModal() {
+  modalOverlay.classList.remove("active");
+  modal.classList.remove("active");
+  document.body.style.overflow = "";
+}
+
+modalClose.addEventListener("click", closeDetailsModal);
+modalOverlay.addEventListener("click", closeDetailsModal);
+
+/* -----------------------------
+   PDF MODAL (VIEW BUTTON)
+------------------------------ */
+document.addEventListener("click", e => {
+  const viewBtn = e.target.closest(".card-view");
+  if (!viewBtn) return;
+
+  e.stopPropagation(); // stop opening details modal
+
+  const pdf = viewBtn.dataset.pdf;
+  if (!pdf) return;
+
+  pdfFrame.src = pdf + "#view=FitH";
+  pdfOverlay.classList.add("active");
+  pdfModal.classList.add("active");
+  document.body.style.overflow = "hidden";
+});
+
+function closePdfModal() {
+  pdfOverlay.classList.remove("active");
+  pdfModal.classList.remove("active");
+  pdfFrame.src = "";
+  document.body.style.overflow = "";
+}
+
+pdfClose.addEventListener("click", closePdfModal);
+pdfOverlay.addEventListener("click", closePdfModal);
+
+verifyBtn.addEventListener("click", () => {
+  if (!activeCertificate || !activeCertificate.pdf) return;
+
+  closeDetailsModal(); // close details modal first
+
+  pdfFrame.src = activeCertificate.pdf + "#view=FitH";
+
+  pdfOverlay.classList.add("active");
+  pdfModal.classList.add("active");
+  document.body.style.overflow = "hidden";
+});
+
+
+/* -----------------------------
+   ESC KEY SUPPORT
+------------------------------ */
+document.addEventListener("keydown", e => {
+  if (e.key !== "Escape") return;
+
+  if (pdfModal.classList.contains("active")) {
+    closePdfModal();
+  } else if (modal.classList.contains("active")) {
+    closeDetailsModal();
+  }
+});
+
+/* -----------------------------
+   THEME TOGGLE
+------------------------------ */
+const themeToggle = document.getElementById("themeToggle");
+const moonIcon = document.getElementById("moonIcon");
+const sunIcon = document.getElementById("sunIcon");
+const themeText = document.getElementById("themeText");
+
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+
+  const isDark = document.body.classList.contains("dark");
+
+  moonIcon.style.display = isDark ? "none" : "block";
+  sunIcon.style.display = isDark ? "block" : "none";
+  themeText.textContent = isDark ? "Light" : "Dark";
+
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+});
+
+
+/* -----------------------------
+   INIT
+------------------------------ */
+/* -----------------------------
+   INIT
+------------------------------ */
+const savedTheme = localStorage.getItem("theme");
+
+if (savedTheme === "dark") {
+  document.body.classList.add("dark");
+  moonIcon.style.display = "none";
+  sunIcon.style.display = "block";
+  themeText.textContent = "Light";
+} else {
+  moonIcon.style.display = "block";
+  sunIcon.style.display = "none";
+  themeText.textContent = "Dark";
+}
+
+document.getElementById("currentYear").textContent = new Date().getFullYear();
+renderCertificates();
+
+</script>
+
+
+</body>
+</html>

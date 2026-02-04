@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S.P.P Portfolio</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ---------- Base Reset ---------- */
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    scroll-behavior: smooth;
+    }
+
+    body {
+    background: linear-gradient(135deg, #ffffff 0%, #f3f7ff 100%);
+    color: #000;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    }
+
+    /* Floating aesthetic blobs */
+    body::before, body::after {
+    content: "";
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    z-index: -1;
+    animation: moveBlob 12s ease-in-out infinite alternate;
+    }
+    body::before {
+    background: radial-gradient(circle, rgba(0,123,255,0.1), transparent 70%);
+    top: 10%;
+    left: 5%;
+    }
+    body::after {
+    background: radial-gradient(circle, rgba(255,0,150,0.1), transparent 70%);
+    bottom: 5%;
+    right: 10%;
+    animation-delay: 4s;
+    }
+    @keyframes moveBlob {
+    from { transform: translate(-20px, -10px) scale(1); }
+    to { transform: translate(20px, 20px) scale(1.2); }
+    }
+
+    /* ---------- Navbar ---------- */
+    nav {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-bottom: 1px solid #000;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    }
+
+    .logo {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    }
+
+    .nav-links {
+    display: flex;
+    gap: 35px;
+    }
+
+    .nav-links a {
+    position: relative;
+    text-decoration: none;
+    color: #000;
+    font-weight: 500;
+    transition: color 0.3s;
+    padding-bottom: 3px;
+    }
+
+    .nav-links a::after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    left: 0;
+    bottom: 0;
+    background-color: #000;
+    transition: 0.3s;
+    }
+
+    .nav-links a:hover::after {
+    width: 100%;
+    }
+
+    /* ---------- Hamburger Menu ---------- */
+    .hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    width: 25px;
+    height: 20px;
+    justify-content: space-between;
+    }
+
+    .hamburger div {
+    width: 100%;
+    height: 3px;
+    background-color: #000;
+    transition: 0.4s;
+    }
+
+    .hamburger.active div:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+    }
+    .hamburger.active div:nth-child(2) {
+    opacity: 0;
+    }
+    .hamburger.active div:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    /* ---------- Hero Section ---------- */
+    #home {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1100px;
+    margin: -1px;
+    flex-wrap: wrap;
+    }
+
+    .text-content {
+    flex: 1;
+    min-width: 250px;
+    }
+
+    .text-content h1 {
+    font-size: 48px;
+    margin-bottom: 15px;
+    min-height: 60px;
+    }
+
+    /* Animated Gradient Typing Text */
+    .typing {
+    background: linear-gradient(90deg, #007bff, #ff70c5, #007bff);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200%;
+    border-right: 2px solid #000;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 60px;
+    display: inline-block;
+    animation: blink 0.7s infinite, gradientMove 3s linear infinite;
+    }
+
+    @keyframes blink {
+    50% { border-color: transparent; }
+    }
+    @keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+    }
+
+    .text-content p {
+    font-size: 18px;
+    margin-bottom: 25px;
+    color: #333;
+    }
+
+    .cv-btn {
+    padding: 10px 25px;
+    border: 1px solid #000;
+    background: transparent;
+    color: #000;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+    border-radius: 10px;
+    }
+
+    .cv-btn:hover {
+    background: #000;
+    color: #fff;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    transform: translateY(-3px);
+    }
+
+    /* ---------- Profile Image ---------- */
+    .profile-img {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #000;
+    margin-left: 40px;
+    position: relative;
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+    transition: all 0.4s ease;
+    }
+
+    .profile-img:hover {
+    transform: rotateY(0deg) rotateX(0deg) scale(1.05);
+    border-color: rgb(255, 251, 251);
+    box-shadow:
+        0 0 30px rgba(0, 8, 255, 0.5),
+        0 0 60px rgba(105, 101, 101, 0.2),
+        inset 0 0 25px rgba(126, 126, 126, 0.1);
+    background: rgba(255, 233, 233, 0.1);
+    }
+
+
+
+    /* ---------- Section ---------- */
+    section {
+    padding: 80px 0;
+    width: 90%;
+    max-width: 1000px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease;
+    }
+    section.visible {
+    opacity: 1;
+    transform: translateY(0);
+    }
+
+    section h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    }
+
+    /* ---------- Certificates ---------- */
+    .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+    }
+
+    .project-card {
+    border: 1px solid #000;
+    padding: 20px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+    }
+
+    /* shimmer glass overlay */
+    .project-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.2) 100%);
+    transform: skewX(-25deg);
+    transition: all 0.6s ease;
+    }
+
+    .project-card:hover::before {
+    left: 150%;
+    }
+
+    .project-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    background: #000;
+    color: #fff;
+    box-shadow: 0 0 25px rgba(0,0,0,0.2);
+    }
+
+    /* ---------- Contact ---------- */
+    #contact {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 25px;
+    }
+
+    .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #000;
+    border-radius: 8px;
+    outline: none;
+    font-size: 15px;
+    background: #f8f8f8;
+    transition: all 0.3s;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+    background: #fff;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .contact-form button {
+    width: 150px;
+    padding: 10px;
+    border: 1px solid #000;
+    background: transparent;
+    color: #000;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+    border-radius: 8px;
+    }
+
+    .contact-form button:hover {
+    background: #000;
+    color: #fff;
+
+    transform: translateY(-3px);
+    }
+
+    .socials {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 10px;
+    }
+
+    .socials a {
+    color: #000;
+    font-size: 30px;
+    transition: all 0.4s ease;
+    }
+
+    .socials a:hover {
+    color: #000000;
+    transform: translateY(-3px) scale(1.1);
+    }
+
+    footer {
+    margin-top: 60px;
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+    color: #555;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(10px);
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 900px) {
+    .nav-links {
+    position: absolute;
+    top: 70px;
+    right: 0;
+    width: 50%;
+    background: #fff;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    border-top: 1px solid #000;
+    padding: 25px 0;
+    display: none;
+    }
+    .nav-links.active { display: flex; }
+    .hamburger { display: flex; }
+    nav { padding: 15px 30px; }
+    #home {
+    flex-direction: column;
+    text-align: center;
+    }
+    .profile-img {
+    margin: 40px 0 0 0;
+    width: 250px;
+    height: 250px;
+    }
+    .text-content h1 { font-size: 36px; }
+    }
+
+    @media (max-width: 480px) {
+    .text-content h1 { font-size: 30px; }
+    .cv-btn { padding: 8px 20px; }
+    .profile-img { width: 220px; height: 220px; }
+    .project-card { padding: 15px; }
+    }
+
+    /* =========================
+    SKILLS SECTION
+    ========================= */
+
+    .skills-category h3 {
+    font-size: 24px;
+    color: #ff4b4b;
+    margin-bottom: 20px;
+    }
+
+    .skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    }
+
+    .skill {
+    background: rgb(255, 255, 255);
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 15px;
+    padding: 20px 25px;
+    width: 150px;
+    
+    display: flex;                 /* NEW */
+    flex-direction: column;        /* NEW */
+    align-items: center;           /* NEW */
+    justify-content: center;       /* NEW */
+    gap: 10px;                     /* controls icon ↔ text distance */
+
+    text-align: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(6px);
+    position: relative;
+    overflow: hidden;
+    }
+
+    .skill img {
+    width: 45px;
+    height: 45px;
+    margin-bottom: 10px;
+    }
+
+    .skill span {
+    display: block;
+    font-size: 14px;
+    color: #000000;
+    }
+
+    .skill {
+    position: relative;
+    overflow: hidden;
+    }
+
+    .skill::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0.6),
+        transparent
+    );
+    transform: skewX(-25deg);
+    transition: all 0.7s ease;
+    }
+
+    .skill:hover::before {
+    left: 125%;
+    }
+
+
+    .skill:hover {
+    transform: translateY(-6px);
+    border-color: #000;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+    .skills-grid {
+        justify-content: center;
+    }
+    .skill {
+        width: 130px;
+        padding: 15px;
+    }
+    .skills-category h3 {
+        font-size: 20px;
+    }
+    }
+
+
+    /* Fix visibility for light-colored design icons */
+    .bright-bg {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    }
+
+    .bright-bg:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgb(0, 0, 0);
+    }
+
+    /* Tweak icon display for better clarity */
+    .skill img {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    }
+
+    /* =========================
+    🌙 DARK MODE
+    ========================= */
+    body.dark-mode {
+    background: linear-gradient(135deg, #0b0b0b 0%, #1a1a1a 100%);
+    color: #0fb8ce;
+    }
+
+    body.dark-mode nav {
+    background-color: rgba(20, 20, 20, 0.9);
+    border-bottom: 1px solid #fff;
+    }
+
+    @media (max-width: 720px) {
+      body.dark-mode .nav-links {
+        background: #121212;
+        border: 1px solid #fff;
+      }
+    }
+
+    body.dark-mode .nav-links a {
+      color: #fff;
+    }
+
+    body.dark-mode .nav-links a::after {  
+      background-color: #fff;
+    }
+
+
+    body.dark-mode .typing,
+    body.dark-mode p {
+      background: linear-gradient(90deg, #7aa2ff, #ff6bd6, #7aa2ff);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    body.dark-mode .cv-btn,
+    body.dark-mode .contact-form button {
+    border-color: #fff;
+    color: #fff;
+    }
+
+    body.dark-mode .cv-btn:hover,
+    body.dark-mode .contact-form button:hover {
+    background: #fff;
+    color: #000;
+    }
+
+    body.dark-mode .project-card {
+    background: #121212;
+    color: #f9f9f9;
+    border-color: #fff;
+    }
+
+    body.dark-mode .project-card:hover {
+    background: #fff;
+    color: #000;
+    }
+
+    body.dark-mode section {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    body.dark-mode footer {
+    background: rgba(20,20,20,0.8);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    color: #ccc;
+    }
+
+    body.dark-mode .skills-section {
+    background: linear-gradient(180deg, #121212 0%, #1c1c1c 100%);
+    }
+
+    body.dark-mode .skill {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark-mode .skill span {
+    color: #fff;
+    }
+
+    body.dark-mode .contact-form input,
+    body.dark-mode .contact-form textarea {
+    background: #222;
+    color: #fff;
+    border-color: #555;
+    }
+
+    body.dark-mode .socials a {
+    color: #fff;
+    }
+
+    /* Inline responsive overrides (mobile-first) */
+  @media (max-width: 720px) {
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      z-index: 2001;
+    }
+
+    .nav-links {
+      position: fixed;
+      top: 70px;
+      right: 16px;
+      background: #ffffff;
+      border: 1px solid #000;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      flex-direction: column;
+      padding: 16px 20px;
+      border-radius: 12px;
+      display: none;
+      z-index: 2000;
+    }
+
+    .nav-links a {
+      color: #000;
+    }
+
+    .nav-links.active {
+      display: flex;
+    }
+  }
+
+  /* ---------- Modal Preview (Improved for Mobile) ---------- */
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    padding: 12px; /* important for small screens */
+  }
+
+  .modal.active {
+    display: flex;
+  }
+
+  .modal-content {
+    background: #fff;
+    width: 100%;
+    max-width: 800px;
+    height: 85vh; /* better than % on mobile */
+    border-radius: 14px;
+    position: relative;
+    overflow: hidden;
+    animation: popIn 0.3s ease;
+  }
+
+  @keyframes popIn {
+    from {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .modal-content iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  /* Bigger, easier close button for touch */
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    font-size: 30px;
+    cursor: pointer;
+    color: #000;
+    z-index: 10;
+    background: rgba(255,255,255,0.9);
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Dark mode support */
+  body.dark-mode .modal-content {
+    background: #121212;
+  }
+
+  body.dark-mode .close-btn {
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+  }
+
+  /* Extra tuning for very small phones */
+  @media (max-width: 480px) {
+    .modal-content {
+      height: 90vh;
+      border-radius: 10px;
+    }
+  }
+
+    /* Skill Icons */
+  .skill i {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: #000;
+    transition: transform 0.3s ease;
+  }
+
+  .skill:hover i {
+    transform: scale(1.15);
+  }
+
+  /* Dark mode support */
+  body.dark-mode .skill i {
+    color: #fff;
+  }
+
+  .form-status {
+    display: none;
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    background: rgba(0, 200, 100, 0.1);
+    color: #0a7a3c;
+    border: 1px solid rgba(0, 200, 100, 0.4);
+    animation: fadeSlide 0.4s ease forwards;
+    -webkit-text-fill-color: initial;
+    background-clip: initial;
+  }
+
+  /* Dark mode support */
+  body.dark-mode .form-status {
+    background: rgba(0, 200, 100, 0.15);
+    color: #7dffb3;
+    border-color: rgba(125, 255, 179, 0.4);
+  }
+
+  @keyframes fadeSlide {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .form-status.hide {
+    animation: fadeOut 0.4s ease forwards;
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+
+  /* ---------- Credentials Text Alignment Fix ---------- */
+  #credentials .project-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: left; /* keeps it professional */
+  }
+
+  #credentials .project-card h3 {
+    font-size: 19px;          /* title */
+    line-height: 1.4;
+    margin-bottom: 6px;
+  }
+
+  #credentials .project-card p {
+    font-size: 16px;           /* description */
+    line-height: 1.6;
+    margin: 0;
+    color: inherit;
+  }
+
+  #credentials .project-card p strong {
+    font-weight: 600;                   
+  }
+
+  #credentials .project-card p:last-child {
+    margin-top: auto;       /* pushes it to the bottom */
+    font-size: 15px;        /* "Click to preview" */
+    opacity: 0.85;
+  }
+
+  /* ---------- Show More Button ---------- */
+  .credentials-more {
+    margin-top: 35px;
+    display: flex;
+    justify-content: center;
+  }
+
+  </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+  <nav>
+    <div class="logo">Sh<span style="color: rgb(0, 75, 214);">an</span>kar</div>
+    <div class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#credentials">Credentials</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="hamburger" id="hamburger">
+      <div></div><div></div><div></div>
+    </div>
+  </nav>
+
+    <button id="themeToggle" class="cv-btn" style="position:fixed;bottom:25px;right:25px;z-index:2000;">
+        🌙 Dark Mode
+    </button>
+
+
+    <!-- HERO -->
+
+  <section id="home" class="fade-in">
+    <div class="text-content">
+      <h1><span class="typing"></span></h1>
+      <p>I’m an adaptable individual open to opportunities across all sectors. I’m always ready to learn and take on new challenges.<br>Scroll down to learn more about me!</p>
+      <a href="Shankar Resume.pdf" download>
+        <button class="cv-btn">Download CV</button>
+      </a>
+    </div>
+    <div class="profile-container">
+
+    </div>
+    <div class="fade-in"></div>
+        <img src="Images/Profile Picture.jpg" alt="Profile" class="profile-img" />
+    </div>
+
+  </section>
+
+
+    <!-- ABOUT -->
+
+  <section id="about" class="fade-in">
+    <h2>About Me</h2>
+    <p>I am a motivated and adaptable individual with a strong interest in learning and growth. I am flexible and open to working across different sectors, 
+      roles, and environments. I enjoy taking on new challenges, learning new skills, and contributing positively to any team or organization. 
+      My ability to adapt quickly and work responsibly allows me to perform well in both technical and non-technical roles. </p>
+  </section>
+
+
+  <!-- SKILLS SECTION -->
+
+  <section class="fade-in">
+    <h2>Skills</h2>
+
+    <div class="skills-category">
+      <div class="skills-grid">
+
+        <div class="skill bright-bg">
+          <i class="fa-solid fa-desktop" style="font-size:40px;margin-bottom:10px;"></i>
+          <span>Basic Computer Knowledge</span>
+        </div>
+
+        <div class="skill bright-bg">
+          <i class="fa-solid fa-comments" style="font-size:40px;margin-bottom:10px;"></i>
+          <span>Communication</span>
+        </div>
+
+        <div class="skill bright-bg">
+          <i class="fa-solid fa-clock" style="font-size:40px;margin-bottom:10px;"></i>
+          <span>Ability to Work Under Deadlines</span>
+        </div>
+
+        <div class="skill bright-bg">
+          <i class="fa-solid fa-bolt" style="font-size:40px;margin-bottom:10px;"></i>
+          <span>Quick Learner</span>
+        </div>
+
+        <div class="skill bright-bg">
+          <i class="fa-solid fa-calendar-check" style="font-size:40px;margin-bottom:10px;"></i>
+          <span>Time Management</span>
+        </div>
+
+        <div class="skill bright-bg">
+          <i class="fa-solid fa-shield-halved" style="font-size:40px;margin-bottom:10px;"></i>
+          <span>Responsible & Reliable</span>
+        </div>
+
+        <div class="skill bright-bg">
+          <i class="fa-solid fa-file-lines" style="font-size:40px;margin-bottom:10px;"></i>
+          <span>Basic Documentation</span>
+        </div>
+
+        <div class="skill bright-bg">
+          <i class="fa-solid fa-envelope-open-text" style="font-size:40px;margin-bottom:10px;"></i>
+          <span>Email & Internet Usage</span>
+        </div>
+
+        <div class="skill bright-bg">
+          <i class="fa-solid fa-people-group" style="font-size:40px;margin-bottom:10px;"></i>
+          <span>Teamwork</span>
+        </div>
+
+        <div class="skill bright-bg">
+          <i class="fa-solid fa-lightbulb" style="font-size:40px;margin-bottom:10px;"></i>
+          <span>Problem Solving</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+        <!-- Credentials -->
+        <section id="credentials" class="fade-in">
+          <h2>Credentials</h2>
+          <div class="project-grid">
+
+            <div class="project-card preview-card" 
+                data-preview="Shankar_Pyke_Hired_Certificate.pdf">
+              <h3>📜 Blog Writing Internship Certification</h3>
+              <p>Certified for  successfully secured Blog Writing internship at InAmigos Foundation.</p>
+              <p><strong>Issued by:</strong> Internshala </p>
+              <p><strong>Year:</strong> 2026</p>
+              <p style="margin-top:10px;font-weight:500;">Click to preview</p>
+            </div>
+
+
+            <div class="project-card preview-card"
+                data-preview="System_Design_Masterclass.pdf">
+              <h3>📜 System Design Masterclass</h3>
+              <p>Comprehensive understanding of system design principles and scalability.</p>
+              <p><strong>Issued by:</strong> Udemy </p>
+              <p><strong>Year:</strong> 2025</p>
+              <p style="margin-top:10px;font-weight:500;">Click to preview</p>
+            </div>
+
+            <div class="project-card preview-card"
+                data-preview="GenAI.pdf">
+              <h3>📜 GenAI</h3>
+              <p>Earned the GenAI 101 with Pieces certification, gaining foundational knowledge of Generative AI concepts.</p>
+              <p><strong>Issued by:</strong> Pieces </p>
+              <p><strong>Year:</strong> 2025</p>
+              <p style="margin-top:10px;font-weight:500;">Click to preview</p>
+            </div>
+          </div>
+
+          <div class="credentials-more">
+            <button id="showMoreBtn" class="cv-btn">Show More</button>
+          </div>
+
+        </section>
+
+
+    <!-- CONTACT -->
+
+  <section id="contact" class="fade-in">
+    <h2>Contact</h2>
+    <p>Let’s collaborate or discuss a project! Fill out the form below 👇</p>
+    <form
+      class="contact-form"
+      action="https://formspree.io/f/xjgoglel"
+      method="POST"
+      id="contactForm"
+    >
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="email" name="email" placeholder="Your Email" required />
+      <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+
+      <button type="submit" id="sendBtn">Send Message</button>
+
+      <div id="formStatus" class="form-status">
+        ✅ Message sent successfully. I’ll get back to you soon!
+      </div>
+    </form>
+
+
+    <div class="socials">
+      <a href="https://github.com/shankar2006458" target="_blank"><i class="fab fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/shankar-prasad-pyke-989257371/" target="_blank"><i class="fab fa-linkedin"></i></a>
+      <a href="mailto:shankarwork2401@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+    </div>
+  </section>
+
+  <footer>© 2025 Shankar. All rights reserved.</footer>
+
+
+    <!-- Typing Animation -->
+
+  <script>
+    const textArray = ["Hello, I'm Shankar Prasad Pyke", "I’m a quick learner", "with a flexible mindset"];
+    const typingElement = document.querySelector(".typing");
+    let textIndex = 0, charIndex = 0;
+
+    function typeText() {
+      if (charIndex < textArray[textIndex].length) {
+        typingElement.textContent += textArray[textIndex].charAt(charIndex);
+        charIndex++;
+        setTimeout(typeText, 100);
+      } else setTimeout(eraseText, 1500);
+    }
+
+    function eraseText() {
+      if (charIndex > 0) {
+        typingElement.textContent = textArray[textIndex].substring(0, charIndex - 1);
+        charIndex--;
+        setTimeout(eraseText, 60);
+      } else {
+        textIndex = (textIndex + 1) % textArray.length;
+        setTimeout(typeText, 100);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => setTimeout(typeText, 500));
+  </script>
+
+
+    <!-- Scroll Fade-in -->
+
+  <script>
+    const sections = document.querySelectorAll("section");
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add("visible");
+      });
+    }, { threshold: 0.15 });
+    sections.forEach(sec => observer.observe(sec));
+  </script>
+
+
+  <!-- Hamburger -->
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navLinks.classList.toggle('active');
+    });
+  </script>
+
+  <script>
+      const themeToggle = document.getElementById("themeToggle");
+      const body = document.body;
+
+      if (localStorage.getItem("theme") === "light") {
+        body.classList.remove("dark-mode");
+        themeToggle.textContent = "🌙 Dark Mode";
+      } else {
+        body.classList.add("dark-mode");
+        themeToggle.textContent = "☀️ Light Mode";
+      }
+
+      themeToggle.addEventListener("click", () => {
+          body.classList.toggle("dark-mode");
+          const darkModeEnabled = body.classList.contains("dark-mode");
+          themeToggle.textContent = darkModeEnabled ? "☀️ Light Mode" : "🌙 Dark Mode";
+          localStorage.setItem("theme", darkModeEnabled ? "dark" : "light");
+      });
+  </script>
+
+  <!-- Certificate Preview Modal -->
+  <div id="previewModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <iframe id="previewFrame" src="" loading="lazy"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById("previewModal");
+    const frame = document.getElementById("previewFrame");
+    const closeBtn = document.querySelector(".close-btn");
+
+    function openModal(src) {
+      frame.src = src;
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden"; // stop background scroll
+    }
+
+    function closeModal() {
+      modal.classList.remove("active");
+      frame.src = "";
+      document.body.style.overflow = ""; // restore scroll
+    }
+
+    document.querySelectorAll(".preview-card").forEach(card => {
+      card.addEventListener("click", () => {
+        openModal(card.getAttribute("data-preview"));
+      });
+    });
+
+    closeBtn.addEventListener("click", closeModal);
+
+    modal.addEventListener("click", e => {
+      if (e.target === modal) closeModal();
+    });
+
+    // Close on ESC key (desktop users)
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape" && modal.classList.contains("active")) {
+        closeModal();
+      }
+    });
+  </script>
+
+  <script>
+    const form = document.getElementById("contactForm");
+    const status = document.getElementById("formStatus");
+    const button = document.getElementById("sendBtn");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      button.textContent = "Sending...";
+      button.disabled = true;
+
+      try {
+        const response = await fetch(form.action, {
+          method: form.method,
+          body: new FormData(form),
+          headers: { Accept: "application/json" },
+        });
+
+        if (response.ok) {
+          status.textContent = "✅ Message sent successfully. I’ll get back to you soon!";
+          status.style.display = "block";
+          status.classList.remove("hide");
+          form.reset();
+
+          // Auto-hide after 5 seconds
+          setTimeout(() => {
+            status.classList.add("hide");
+            setTimeout(() => {
+              status.style.display = "none";
+              status.classList.remove("hide");
+            }, 400);
+          }, 5000);
+        } else {
+          throw new Error("Failed");
+        }
+      } catch {
+        status.textContent = "❌ Something went wrong. Please try again.";
+        status.style.display = "block";
+        status.style.background = "rgba(255,0,0,0.1)";
+        status.style.color = "#b00020";
+        status.style.borderColor = "rgba(255,0,0,0.3)";
+      }
+
+      button.textContent = "Send Message";
+      button.disabled = false;
+    });
+  </script>
+
+  <script>
+    document.getElementById("showMoreBtn").addEventListener("click", () => {
+      window.open("Certificate Showcase.html", "_blank");
+    });
+  </script>
+
+</body>
+</html>
